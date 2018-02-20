@@ -131,7 +131,6 @@ function updateGameArea() {
   myGamePiece.speedX = 0
   myGamePiece.speedY = 0
   // x controls temporary
-  if (myGameArea.key && myGameArea.key == 38) {accelerate(-0.2)}
   myGamePiece.newPos()
   myGamePiece.update()
   myScore.text="Score: " + myGameArea.frameNo
