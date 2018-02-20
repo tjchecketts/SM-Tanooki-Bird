@@ -1,9 +1,11 @@
 var myGamePiece
 var myObstacles = []
+var myScore
 
 function startGame() {
   myGameArea.start()
-  myGamePiece = new component(30, 30, "red", 10, 120)
+  myScore = new component("30px", "Consolas", "black", 280, 40, "text")
+  myGamePiece = new component(40, 40, "./images/SM-tanooki-flying.png", 10, 120, "image")
 }
 
 var myGameArea = {
@@ -35,15 +37,31 @@ function everyInterval(n) {
   return false
 }
 
-function component(width, height, color, x, y) {
+function component(width, height, color, x, y, type) {
+  this.type = type
+  if (type == "image") {
+    this.image = new Image()
+    this.image.src = color
+  }
   this.width = width
   this.height = height
   this.x = x
   this.y = y
   this.update = function() {
     ctx = myGameArea.context
-    ctx.fillStyle = color
-    ctx.fillRect(this.x, this.y, this.width, this.height)
+    if (this.type == "text") {
+      ctx.font = this.width + "" + this.height
+      ctx.fillStyle = color
+      ctx.fillText(this.text, this.x, this.y)
+    } else if (this.type == "image") {
+      ctx.drawImage(this.image, 
+        this.x, 
+        this.y,
+        this.width, this.height)
+    } else {
+      ctx.fillStyle = color
+      ctx.fillRect(this.x, this.y, this.width, this.height)
+    }
   }
   this.newPos = function() {
     this.x += this.speedX
@@ -92,8 +110,8 @@ function updateGameArea() {
     minGap = 50
     maxGap = 200
     gap = Math.floor(Math.random()*(maxGap - minGap + 1) + minGap)
-    myObstacles.push(new component(10, height, "green", x, 0))
-    myObstacles.push(new component(10, x - height - gap, "green", x, height + gap))
+    myObstacles.push(new component(25, height, "green", x, 0))
+    myObstacles.push(new component(25, x - height - gap, "green", x, height + gap))
   }
   for (i = 0; i < myObstacles.length; i += 1) {
     myObstacles[i].x -= 1
@@ -109,4 +127,6 @@ function updateGameArea() {
   if (myGameArea.key && myGameArea.key == 40) {myGamePiece.speedY = 1 }
   myGamePiece.newPos()
   myGamePiece.update()
+  myScore.text="Score: " + myGameArea.frameNo
+  myScore.update()
 }
