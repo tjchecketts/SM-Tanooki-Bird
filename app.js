@@ -47,6 +47,8 @@ function component(width, height, color, x, y, type) {
   this.height = height
   this.x = x
   this.y = y
+  this.gravity = 0.05
+  this.gravitySpeed = 0
   this.update = function() {
     ctx = myGameArea.context
     if (this.type == "text") {
@@ -64,8 +66,16 @@ function component(width, height, color, x, y, type) {
     }
   }
   this.newPos = function() {
+    this.gravitySpeed += this.gravity
     this.x += this.speedX
-    this.y += this.speedY 
+    this.y += this.speedY + this.gravitySpeed
+    this.hitsBottom()
+  }
+  this.hitsBottom = function() {
+    var rockBottom = myGameArea.canvas.height - this.height
+    if (this.y > rockBottom) {
+      this.y = rockBottom
+    }
   }
   // stops game if objects collide
   this.crashWith = function(otherObj) {
@@ -107,11 +117,11 @@ function updateGameArea() {
     minHeight = 20
     maxHeight = 200
     height = Math.floor(Math.random()*(maxHeight - minHeight + 1) + minHeight)
-    minGap = 50
-    maxGap = 200
+    minGap = 75
+    maxGap = 150
     gap = Math.floor(Math.random()*(maxGap - minGap + 1) + minGap)
-    myObstacles.push(new component(25, height, "green", x, 0))
-    myObstacles.push(new component(25, x - height - gap, "green", x, height + gap))
+    myObstacles.push(new component(35, height, "./images/mario-pipe-down.png", x, 0, "image"))
+    myObstacles.push(new component(35, x - height - gap, "./images/mario-pipe-up.png", x, height + gap, "image"))
   }
   for (i = 0; i < myObstacles.length; i += 1) {
     myObstacles[i].x -= 1
@@ -121,12 +131,13 @@ function updateGameArea() {
   myGamePiece.speedX = 0
   myGamePiece.speedY = 0
   // x controls temporary
-  if (myGameArea.key && myGameArea.key == 37) {myGamePiece.speedX = -1 }
-  if (myGameArea.key && myGameArea.key == 39) {myGamePiece.speedX = 1 }
-  if (myGameArea.key && myGameArea.key == 38) {myGamePiece.speedY = -1 }
-  if (myGameArea.key && myGameArea.key == 40) {myGamePiece.speedY = 1 }
+  if (myGameArea.key && myGameArea.key == 38) {accelerate(-0.2)}
   myGamePiece.newPos()
   myGamePiece.update()
   myScore.text="Score: " + myGameArea.frameNo
   myScore.update()
+}
+
+function accelerate(n) {
+  myGamePiece.gravity = n
 }
