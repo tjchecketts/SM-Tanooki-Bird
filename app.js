@@ -1,16 +1,27 @@
 var myGamePiece
 var myObstacles = []
 var myScore
+var w = window.innerWidth
+var h = window.innerHeight
+var acc = document.getElementById("acc")
+
+// allows both mobile and browser
+var isTouchSupported = 'ontouchstart' in window
+var startEvent = isTouchSupported ? 'touchstart' : 'mousedown'
+var endEvent = isTouchSupported ? 'touchend' : 'mouseup'
+acc.addEventListener(startEvent, function() {accelerate(-0.2)}, false)
+acc.addEventListener(endEvent, function() {accelerate(0.1)}, false)
 
 function startGame() {
   myGameArea.start()
   myScore = new component("30px", "Consolas", "black", 280, 40, "text")
-  myGamePiece = new component(40, 40, "./images/SM-tanooki-flying.png", 10, 120, "image")
+  myGamePiece = new component(45, 45, "./images/SM-tanooki-flying.png", 10, 120, "image")
 }
 
 var myGameArea = {
   canvas : document.createElement("canvas"),
   start : function() {
+    // aspect ratio 16:9 == 1.77:1
     this.canvas.width = 480
     this.canvas.height = 270
     this.context = this.canvas.getContext("2d")
@@ -37,6 +48,7 @@ function everyInterval(n) {
   return false
 }
 
+// create different components
 function component(width, height, color, x, y, type) {
   this.type = type
   if (type == "image") {
@@ -77,6 +89,7 @@ function component(width, height, color, x, y, type) {
       this.y = rockBottom
     }
   }
+
   // stops game if objects collide
   this.crashWith = function(otherObj) {
     var myLeft = this.x
@@ -103,6 +116,7 @@ function component(width, height, color, x, y, type) {
 function updateGameArea() {
   var x, height, gap, minHeight, maxHeight, minGap, maxGap
 
+  // crash with any object stops game
   for (i = 0; i < myObstacles.length; i += 1) {
     if (myGamePiece.crashWith(myObstacles[i])) {
       myGameArea.stop()
@@ -111,13 +125,12 @@ function updateGameArea() {
   }
   myGameArea.clear()
   myGameArea.frameNo += 1
-  // creates 
   if (myGameArea.frameNo == 1 || everyInterval(150)) {
     x = myGameArea.canvas.width
     minHeight = 20
     maxHeight = 200
     height = Math.floor(Math.random()*(maxHeight - minHeight + 1) + minHeight)
-    minGap = 75
+    minGap = 50
     maxGap = 150
     gap = Math.floor(Math.random()*(maxGap - minGap + 1) + minGap)
     myObstacles.push(new component(35, height, "./images/mario-pipe-down.png", x, 0, "image"))
@@ -130,7 +143,6 @@ function updateGameArea() {
 
   myGamePiece.speedX = 0
   myGamePiece.speedY = 0
-  // x controls temporary
   myGamePiece.newPos()
   myGamePiece.update()
   myScore.text="Score: " + myGameArea.frameNo
