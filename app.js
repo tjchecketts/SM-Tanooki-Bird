@@ -102,10 +102,10 @@ function component(width, height, color, x, y, type) {
     var otherBottom = otherObj.y + (otherObj.height)
     var crash = true
     if (
-      (myBottom < otherTop) ||
-      (myTop > otherBottom) ||
-      (myRight < otherLeft) ||
-      (myLeft > otherRight)
+      myBottom < otherTop ||
+      myTop > otherBottom ||
+      myRight < otherLeft ||
+      myLeft > otherRight
     ) {
       crash = false
     }
@@ -134,7 +134,9 @@ function updateGameArea() {
     maxGap = 120
     gap = Math.floor(Math.random()*(maxGap - minGap + 1) + minGap)
     myObstacles.push(new component(35, height, "./images/mario-pipe-down.png", x, 0, "image"))
-    myObstacles.push(new component(35, x - height - gap, "./images/mario-pipe-up.png", x, height + gap, "image"))
+    myObstacles.push(new component(35, x - height - gap, 
+      "./images/mario-pipe-up.png", x, height + gap, "image"
+    ))
   }
   for (i = 0; i < myObstacles.length; i += 1) {
     myObstacles[i].x -= 1
@@ -145,7 +147,7 @@ function updateGameArea() {
   myGamePiece.speedY = 0
   myGamePiece.newPos()
   myGamePiece.update()
-  myScore.text="Score: " + myGameArea.frameNo
+  myScore.text=`Score: ${Math.floor(myGameArea.frameNo / 150 - 2)}`
   myScore.update()
 }
 
