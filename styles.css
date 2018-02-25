@@ -10,10 +10,16 @@ canvas {
   background-size: cover;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
 button {
-  display: block;
-  margin: 2px 40%;
   border-radius: 5%;
+  margin: 3px 40%;
   cursor: pointer;
   outline: none;
   font-size: 13px;

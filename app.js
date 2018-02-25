@@ -81,12 +81,12 @@ function component(width, height, color, x, y, type) {
     this.gravitySpeed += this.gravity
     this.x += this.speedX
     this.y += this.speedY + this.gravitySpeed
-    this.hitsBottom()
+    this.hitsBorders()
   }
-  this.hitsBottom = function() {
+  this.hitsBorders = function() {
     var rockBottom = myGameArea.canvas.height - this.height
-    if (this.y > rockBottom) {
-      this.y = rockBottom
+    if (this.y > rockBottom || this.y < 0) {
+      myGameArea.stop()
     }
   }
 
