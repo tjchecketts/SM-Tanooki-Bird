@@ -12,5 +12,9 @@ canvas {
 
 button {
   display: block;
-  margin: 0 40%;
+  margin: 2px 40%;
+  border-radius: 5%;
+  cursor: pointer;
+  outline: none;
+  font-size: 13px;
 }

@@ -14,7 +14,7 @@ acc.addEventListener(endEvent, function() {accelerate(0.1)}, false)
 
 function startGame() {
   myGameArea.start()
-  myScore = new component("30px", "Consolas", "black", 280, 40, "text")
+  myScore = new component("30px", "Consolas", "black", 397, 49, "text")
   myGamePiece = new component(45, 45, "./images/SM-tanooki-flying.png", 10, 120, "image")
 }
 
@@ -22,8 +22,8 @@ var myGameArea = {
   canvas : document.createElement("canvas"),
   start : function() {
     // aspect ratio 16:9 == 1.77:1
-    this.canvas.width = 480
     this.canvas.height = 270
+    this.canvas.width = this.canvas.height * 1.7777
     this.context = this.canvas.getContext("2d")
     document.body.insertBefore(this.canvas, document.body.childNodes[0])
     this.frameNo = 0
@@ -127,11 +127,11 @@ function updateGameArea() {
   myGameArea.frameNo += 1
   if (myGameArea.frameNo == 1 || everyInterval(150)) {
     x = myGameArea.canvas.width
-    minHeight = 20
-    maxHeight = 200
+    minHeight = 10
+    maxHeight = 140
     height = Math.floor(Math.random()*(maxHeight - minHeight + 1) + minHeight)
-    minGap = 50
-    maxGap = 150
+    minGap = 75
+    maxGap = 120
     gap = Math.floor(Math.random()*(maxGap - minGap + 1) + minGap)
     myObstacles.push(new component(35, height, "./images/mario-pipe-down.png", x, 0, "image"))
     myObstacles.push(new component(35, x - height - gap, "./images/mario-pipe-up.png", x, height + gap, "image"))
